@@ -1,34 +1,93 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
+     Copied from GameDevChef Car controller
+     https://www.youtube.com/watch?v=Z4HA8zJhGEk
+*/
 public class CarMovement : MonoBehaviour
 {
-    float movementSpeed = 3f;
+    private const string HORIZONTAL = "Horizontal";
+    private const string VERTICAL = "Vertical";
 
-    public float horizontalSpeed = 2.0F;
-    public float verticalSpeed = 2.0F;
+    private float horizontalInput;
+    private float verticalInput;
+    private float currentSteerAngle;
+    [SerializeField]private float currentbreakForce;
+    private bool isBreaking;
+
+    [SerializeField] private float motorForce;
+    [SerializeField] private float breakForce;
+    [SerializeField] private float maxSteerAngle;
+
+    [SerializeField] private WheelCollider frontLeftWheelCollider;
+    [SerializeField] private WheelCollider frontRightWheelCollider;
+    [SerializeField] private WheelCollider rearLeftWheelCollider;
+    [SerializeField] private WheelCollider rearRightWheelCollider;
+
+    [SerializeField] private Transform frontLeftWheelTransform;
+    [SerializeField] private Transform frontRightWheeTransform;
+    [SerializeField] private Transform rearLeftWheelTransform;
+    [SerializeField] private Transform rearRightWheelTransform;
     // Start is called before the first frame update
-    void Start()
+
+
+    // Update is called once per frame
+    private void FixedUpdate()
     {
+        GetInput();
+        HandleMotor();
+        HandleSteering();
+        UpdateWheels();
+    }
+
+    public void GetInput()
+    {
+        horizontalInput = Input.GetAxis(HORIZONTAL);
+        verticalInput = Input.GetAxis(VERTICAL);
+        isBreaking = Input.GetKey(KeyCode.Space);
+    }
+    private void HandleMotor()
+    {
+        frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
+        frontRightWheelCollider.motorTorque = verticalInput * motorForce;
+        currentbreakForce = isBreaking ? breakForce : 0f;
+        Debug.Log("true");
+        ApplyBreaking();
+        //correccion al codigo original el creador preguntaba si el jugador estaba usando el freno pero no era necesario
+        //ya que la respuesta y el ctontrol estaban en la linea 54 haciendo la pregunta redundante
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void ApplyBreaking()
     {
-        Controller();
+        frontRightWheelCollider.brakeTorque = currentbreakForce;
+        frontLeftWheelCollider.brakeTorque = currentbreakForce;
+        rearLeftWheelCollider.brakeTorque = currentbreakForce;
+        rearRightWheelCollider.brakeTorque = currentbreakForce;
     }
 
-    public void Controller()
+    private void HandleSteering()
     {
-        float moveFB = Input.GetAxis("Vertical") * movementSpeed * Time.deltaTime;
-        //float moveXB = Input.GetAxis("Horizontal") * movementSpeed * Time.deltaTime;
+        currentSteerAngle = maxSteerAngle * horizontalInput;
+        frontLeftWheelCollider.steerAngle = currentSteerAngle;
+        frontRightWheelCollider.steerAngle = currentSteerAngle;
+    }
 
-        float h = horizontalSpeed * Input.GetAxis("Horizontal");
-        float v = verticalSpeed * Input.GetAxis("Mouse Y");
+    private void UpdateWheels()
+    {
+        UpdateSingleWheel(frontLeftWheelCollider, frontLeftWheelTransform);
+        UpdateSingleWheel(frontRightWheelCollider, frontRightWheeTransform);
+        UpdateSingleWheel(rearRightWheelCollider, rearRightWheelTransform);
+        UpdateSingleWheel(rearLeftWheelCollider, rearLeftWheelTransform);
+    }
 
-        transform.Translate(0f, 0f, moveFB);
-        transform.Rotate(0, h, 0);
+    private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)
+    {
+        Vector3 pos;
+        Quaternion rot;
+        wheelCollider.GetWorldPose(out pos, out rot);
+        wheelTransform.rotation = rot;
+        wheelTransform.position = pos;
     }
 }
