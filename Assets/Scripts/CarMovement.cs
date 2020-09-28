@@ -16,6 +16,8 @@ public class CarMovement : MonoBehaviour
     [SerializeField]private float currentbreakForce;
     private bool isBreaking;
 
+    //public 
+
     [SerializeField] private float motorForce;
     [SerializeField] private float breakForce;
     [SerializeField] private float maxSteerAngle;
@@ -52,7 +54,7 @@ public class CarMovement : MonoBehaviour
         frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
         frontRightWheelCollider.motorTorque = verticalInput * motorForce;
         currentbreakForce = isBreaking ? breakForce : 0f;
-        Debug.Log("true");
+        
         ApplyBreaking();
         //correccion al codigo original el creador preguntaba si el jugador estaba usando el freno pero no era necesario
         //ya que la respuesta y el ctontrol estaban en la linea 54 haciendo la pregunta redundante

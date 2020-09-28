@@ -1,8 +1,11 @@
 Proyecto de unity 3D
 escena de un bosque expansivo
+Todos los assets son gratuitos
 
+Audios del bosuqe por Overtone2 freesound (non commercial licence)
 
 --CONTROLES--
-FLechas o teclas WASD (usando inputs de unity)
-Freno barra espaciadora
+Movimiento: flechas o teclas WASD 
+Freno: barra espaciadora
+camara: mouse
 
