@@ -1,0 +1,17 @@
+Funcionalidad de la IA se puede encontrar en:
+
+AICar.cs            <- control principal de llamdas a la interfaz
+IaState.cs          <- interfaz de la IA
+AccelerateState.cs  <- debio llamarse drivingAI
+IdleState.cs        <- estado idle para saber que l asimulacion esta corriendo y hacer la primera transicion
+BreakState.cs       <- posiblemente redundante
+
+Funcionalidad de los carros:
+
+CarMovement.cs     <-no es codigo propio pero tiene unas cuantas modificaciones, este se encarga de manejar la 
+                    fisica del carro rotacion de las llantas y calcula la aceleracion en base a la fuerza del motor
+
+Sonidos de los carros:
+
+CarFX 
+AImixer             <- mixer para dejar de escuchar al carro de la IA cuando esta lo suficientemente lejos

@@ -10,13 +10,16 @@ public class CarMovement : MonoBehaviour
     private const string HORIZONTAL = "Horizontal";
     private const string VERTICAL = "Vertical";
 
-    private float horizontalInput;
-    private float verticalInput;
+    public float horizontalInput;
+    public float verticalInput;
     private float currentSteerAngle;
     [SerializeField]private float currentbreakForce;
     private bool isBreaking;
 
+
+
     //public 
+    public bool IsAi;
 
     [SerializeField] private float motorForce;
     [SerializeField] private float breakForce;
@@ -37,9 +40,12 @@ public class CarMovement : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
-        GetInput();
-        HandleMotor();
-        HandleSteering();
+        if (!IsAi) //permite al jugador controlar un carro independientemente de la IA
+        {
+            GetInput();
+            HandleMotor();
+            HandleSteering();
+        }
         UpdateWheels();
     }
 
@@ -49,7 +55,7 @@ public class CarMovement : MonoBehaviour
         verticalInput = Input.GetAxis(VERTICAL);
         isBreaking = Input.GetKey(KeyCode.Space);
     }
-    private void HandleMotor()
+    public void HandleMotor()
     {
         frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
         frontRightWheelCollider.motorTorque = verticalInput * motorForce;
@@ -69,9 +75,11 @@ public class CarMovement : MonoBehaviour
         rearRightWheelCollider.brakeTorque = currentbreakForce;
     }
 
-    private void HandleSteering()
+    public void HandleSteering()
     {
         currentSteerAngle = maxSteerAngle * horizontalInput;
+        
+        
         frontLeftWheelCollider.steerAngle = currentSteerAngle;
         frontRightWheelCollider.steerAngle = currentSteerAngle;
     }

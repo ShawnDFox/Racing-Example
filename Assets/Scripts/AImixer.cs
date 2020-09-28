@@ -15,7 +15,7 @@ public class AImixer : MonoBehaviour
         //Debug.Log("triggered " + other.GetComponentInParent<Rigidbody>().name);
         try
         {
-            if (other.GetComponentInParent<Rigidbody>().name == "car 1203 yellow")
+            if (other.tag == "Player")
             {
                 AIactive.TransitionTo(0.5f);
                 ;
@@ -31,7 +31,7 @@ public class AImixer : MonoBehaviour
     {
         try {
 
-            if (other.GetComponentInParent<Rigidbody>().name == "car 1203 yellow")
+            if (other.tag == "Player")
             {
                 AIinactive.TransitionTo(0.5f);
                 
